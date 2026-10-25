@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/site.php';
 require_once '../includes/functions.php';
 if (!isset($_SESSION['admin'])) {
     header('Location: ../account.php');
@@ -63,31 +64,14 @@ $profile = get_site_profile();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg">
-    <title>管理后台 - DuoDuo's Daily</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+<head><?php blog_head("管理后台 · DuoDuo's Daily"); ?>
 </head>
-<body>
-    <div class="bg-overlay"></div>
+<body class="blog-app management-view" id="top">
 
-    <nav class="navbar">
-        <div class="nav-inner">
-            <a href="../index.php" class="nav-logo">DuoDuo's Daily</a>
-            <ul class="nav-links">
-                <li><a href="../index.php">← 返回博客</a></li>
-                <?php if($logged_in): ?>
-                <li><a href="?logout=1">退出登录</a></li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </nav>
 
-    <div class="admin-layout">
+    <?php blog_workspace_nav(); ?>
+
+    <main class="admin-layout" id="journal">
         <?php if ($logged_in): ?>
         <div class="admin-shell">
             <aside class="admin-sidebar">
@@ -110,8 +94,8 @@ $profile = get_site_profile();
                     <form method="POST">
                         <input type="hidden" name="save_profile" value="1">
                         <div class="profile-form-grid">
-                            <div class="form-group"><label>显示名称</label><input name="display_name" value="<?= htmlspecialchars($profile['display_name']) ?>" required></div>
-                            <div class="form-group"><label>个人简介</label><input name="description" value="<?= htmlspecialchars($profile['description']) ?>" required></div>
+                            <div class="form-group"><label for="field-display_name">显示名称</label><input id="field-display_name" name="display_name" value="<?= htmlspecialchars($profile['display_name']) ?>" required></div>
+                            <div class="form-group"><label for="field-description">个人简介</label><input id="field-description" name="description" value="<?= htmlspecialchars($profile['description']) ?>" required></div>
                             <div class="form-group profile-form-wide">
                                 <label>头像图片 URL</label>
                                 <div class="avatar-upload-row">
@@ -123,12 +107,12 @@ $profile = get_site_profile();
                                 </div>
                                 <small class="form-help">默认头像文件已在项目中：/assets/images/avatar.jpeg</small>
                             </div>
-                            <div class="form-group"><label>QQ</label><input name="qq" value="<?= htmlspecialchars($profile['qq']) ?>"></div>
-                            <div class="form-group"><label>邮箱</label><input type="email" name="email" value="<?= htmlspecialchars($profile['email']) ?>"></div>
-                            <div class="form-group"><label>GitHub 链接</label><input type="url" name="link_github" value="<?= htmlspecialchars($profile['link_github']) ?>"></div>
-                            <div class="form-group"><label>微博链接</label><input type="url" name="link_weibo" value="<?= htmlspecialchars($profile['link_weibo']) ?>"></div>
-                            <div class="form-group"><label>博客园链接</label><input type="url" name="link_cnblogs" value="<?= htmlspecialchars($profile['link_cnblogs']) ?>"></div>
-                            <div class="form-group"><label>CSDN 链接</label><input type="url" name="link_csdn" value="<?= htmlspecialchars($profile['link_csdn']) ?>"></div>
+                            <div class="form-group"><label for="field-qq">QQ</label><input id="field-qq" name="qq" value="<?= htmlspecialchars($profile['qq']) ?>"></div>
+                            <div class="form-group"><label for="field-email">邮箱</label><input id="field-email" type="email" name="email" value="<?= htmlspecialchars($profile['email']) ?>"></div>
+                            <div class="form-group"><label for="field-link_github">GitHub 链接</label><input id="field-link_github" type="url" name="link_github" value="<?= htmlspecialchars($profile['link_github']) ?>"></div>
+                            <div class="form-group"><label for="field-link_weibo">微博链接</label><input id="field-link_weibo" type="url" name="link_weibo" value="<?= htmlspecialchars($profile['link_weibo']) ?>"></div>
+                            <div class="form-group"><label for="field-link_cnblogs">博客园链接</label><input id="field-link_cnblogs" type="url" name="link_cnblogs" value="<?= htmlspecialchars($profile['link_cnblogs']) ?>"></div>
+                            <div class="form-group"><label for="field-link_csdn">CSDN 链接</label><input id="field-link_csdn" type="url" name="link_csdn" value="<?= htmlspecialchars($profile['link_csdn']) ?>"></div>
                         </div>
                         <button type="submit" class="btn">保存个人资料</button>
                     </form>
@@ -138,12 +122,10 @@ $profile = get_site_profile();
                     <h2>✍️ 写新文章</h2>
                     <form method="POST" action="save_post.php">
                         <div class="form-group">
-                            <label>标题</label>
-                            <input type="text" name="title" placeholder="文章标题" required>
+                            <label for="field-title">标题</label><input id="field-title" type="text" name="title" placeholder="文章标题" required>
                         </div>
                         <div class="form-group">
-                            <label>分类</label>
-                            <select name="category">
+                            <label for="field-category">分类</label><select id="field-category" name="category">
                                 <option value="life">生活</option>
                                 <option value="tech">技术</option>
                                 <option value="music">音乐</option>
@@ -165,21 +147,8 @@ $profile = get_site_profile();
                         </div>
                         <div class="form-group">
                             <label>内容</label>
-                            <div class="editor-toolbar">
-                                <button type="button" class="btn btn-sm toolbar-btn" onclick="toggleMarkdownPreview(this)">预览</button>
-                                <button type="button" class="btn btn-sm toolbar-btn" onclick="wrapSelection('**', '**', '加粗文字')">加粗</button>
-                                <button type="button" class="btn btn-sm toolbar-btn" onclick="wrapSelection('> ', '', '引用内容')">引用</button>
-                                <button type="button" class="btn btn-sm toolbar-btn" onclick="wrapSelection('\n- ', '', '列表项')">列表</button>
-                                <label class="btn btn-sm toolbar-btn upload-content-image">
-                                    插入图片
-                                    <input type="file" accept="image/*" onchange="insertContentImage(this, false)">
-                                </label>
-                                <label class="btn btn-sm toolbar-btn upload-content-image">
-                                    居中图片
-                                    <input type="file" accept="image/*" onchange="insertContentImage(this, true)">
-                                </label>
-                            </div>
-                            <textarea name="content" class="markdown-editor" placeholder="支持 Markdown，可用 ![图片说明](图片地址) 插入图片，或直接用上方按钮插入图片" required></textarea>
+                            <?php blog_editor_toolbar(); ?>
+                            <textarea name="content" class="markdown-editor" placeholder="写下正文，在需要插图的位置点击「上传正文图片」…" required></textarea>
                             <div class="markdown-preview" hidden></div>
                         </div>
                         <button type="submit" class="btn">发布文章</button>
@@ -190,22 +159,19 @@ $profile = get_site_profile();
                     <h2>🎵 添加音乐</h2>
                     <form method="POST" action="save_music.php" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label>歌曲名</label>
-                            <input type="text" name="name" placeholder="歌曲名称" required>
+                            <label for="field-name">歌曲名</label><input id="field-name" type="text" name="name" placeholder="歌曲名称" required>
                         </div>
                         <div class="form-group">
-                            <label>歌手</label>
-                            <input type="text" name="artist" placeholder="歌手名（可选）">
+                            <label for="field-artist">歌手</label><input id="field-artist" type="text" name="artist" placeholder="歌手名（可选）">
                         </div>
                         <div class="form-group">
-                            <label>上传音频文件（flac/mp3）</label>
-                            <input type="file" name="audio_file" accept=".mp3,.flac,.ogg,.wav">
+                            <label for="field-audio_file">上传音频文件（flac/mp3）</label><input id="field-audio_file" type="file" name="audio_file" accept=".mp3,.flac,.ogg,.wav">
                         </div>
                         <button type="submit" class="btn">添加音乐</button>
                     </form>
 
                     <?php if($music_list): ?>
-                    <div style="margin-top:20px">
+                    <div class="admin-music-list" style="margin-top:20px">
                         <div class="card-title">音乐列表</div>
                         <?php foreach($music_list as $m): ?>
                         <div class="post-list-item">
@@ -243,11 +209,7 @@ $profile = get_site_profile();
             </div>
         </div>
         <?php endif; ?>
-    </div>
-
-    <footer class="footer">
-        <p>© <?= date('Y') ?> DuoDuo's Daily</p>
-    </footer>
+    </main>
 
     <script>
         const adminNavButtons = document.querySelectorAll('.admin-nav');
@@ -274,43 +236,14 @@ $profile = get_site_profile();
             button.addEventListener('click', () => showAdminSection(button.dataset.target));
         });
 
-        function uploadCover(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const form = new FormData();
-            form.append('image', file);
-            form.append('type', 'post');
-            fetch('upload_image.php', { method: 'POST', body: form })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.url) {
-                        const normalizedUrl = data.url.startsWith('/') ? data.url : '/' + data.url;
-                        document.getElementById('cover-url').value = normalizedUrl;
-                        document.getElementById('preview-img').src = normalizedUrl;
-                        document.getElementById('cover-preview').style.display = 'block';
-                    }
-                });
-        }
+        const initialSection = location.hash.slice(1);
+        showAdminSection([...adminSections].some(section => section.id === initialSection) ? initialSection : 'site-profile');
 
-        function uploadAvatar(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const form = new FormData();
-            form.append('image', file);
-            form.append('type', 'avatar');
-            fetch('upload_image.php', { method: 'POST', body: form })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.url) {
-                        const avatarInput = document.querySelector('input[name="avatar"]');
-                        if (avatarInput) avatarInput.value = data.url.startsWith('/') ? data.url : '/' + data.url;
-                    }
-                });
-        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-    <script src="../assets/js/markdown-editor.js"></script>
+    <script src="../assets/js/markdown-editor.js?v=20261021-2"></script>
+<?php blog_footer(); ?>
 </body>
 </html>
 

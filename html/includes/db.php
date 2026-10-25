@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', 'mysql');
-define('DB_USER', 'DuoDuo');
-define('DB_PASS', 'DuoDuo1103-mysql');
-define('DB_NAME', 'blog_db');
+define('DB_HOST', getenv('DB_HOST') !== false ? getenv('DB_HOST') : 'mysql');
+define('DB_USER', getenv('DB_USER') !== false ? getenv('DB_USER') : 'blog_user');
+define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
+define('DB_NAME', getenv('DB_NAME') !== false ? getenv('DB_NAME') : 'blog_db');
 
 try {
     $pdo = new PDO(
@@ -12,7 +12,9 @@ try {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
     );
 } catch(PDOException $e) {
-    die("数据库连接失败: " . $e->getMessage());
+    error_log("Database connection failed: " . $e->getMessage());
+    http_response_code(503);
+    exit("数据库暂时不可用，请稍后再试。");
 }
 $pdo->exec("CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,6 +78,11 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS admin_users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
 $check = $pdo->query("SELECT COUNT(*) FROM admin_users")->fetchColumn();
-if($check == 0) {
-    $pdo->exec("INSERT INTO admin_users (username, password) VALUES ('DuoDuo', '".password_hash('DuoDuo1103-blog', PASSWORD_DEFAULT)."')");
+if ($check == 0) {
+    $admin_username = getenv('BLOG_ADMIN_USERNAME') ?: '';
+    $admin_password = getenv('BLOG_ADMIN_PASSWORD') ?: '';
+    if ($admin_username !== '' && $admin_password !== '') {
+        $create_admin = $pdo->prepare("INSERT INTO admin_users (username, password) VALUES (?, ?)");
+        $create_admin->execute([$admin_username, password_hash($admin_password, PASSWORD_DEFAULT)]);
+    }
 }

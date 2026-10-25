@@ -1,0 +1,364 @@
+/* Public journal theme. Administration keeps its existing styles. */
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+body.blog-app { --paper:#f3f8f5; --surface:#fff; --surface-soft:#e8f1ec; --ink:#263f36; --muted:#637a70; --line:#dbe7df; --green:#3f7460; --mint:#e0ece5; --aqua:#d3e6e9; --card:var(--surface); --card-border:var(--line); --text:var(--ink); --text-light:var(--muted); --accent:var(--green); --accent2:var(--green); --shadow:0 10px 35px rgba(37,65,50,.035); background:var(--paper); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; font-size:15px; line-height:1.7; margin:0; }
+body.blog-app[data-theme="dark"] { --paper:#172321; --surface:#202f2b; --surface-soft:#293934; --ink:#e0e9e2; --muted:#a1b1a9; --line:#35473f; --green:#a0c7b3; --mint:#2b443b; --aqua:#293e3d; --shadow:0 10px 35px rgba(0,0,0,.08); color-scheme:dark; }
+.blog-app * { box-sizing:border-box; }
+.blog-app a { color:inherit; text-decoration:none; }
+.blog-app button,.blog-app input,.blog-app textarea { font:inherit; }
+.blog-app button { cursor:pointer; }
+.blog-app :focus-visible { outline:2px solid var(--green); outline-offset:5px; }
+.blog-app .blog-icon { display:inline-block; width:20px; height:20px; flex-shrink:0; vertical-align:middle; }
+.blog-app .skip-link { position:fixed; top:-70px; left:20px; z-index:2000; padding:12px 20px; background:var(--surface); border:1px solid var(--green); border-radius:8px; }
+.blog-app .skip-link:focus { top:12px; }
+.blog-app .site-header { position:sticky; top:0; height:78px; background:var(--surface); border-bottom:1px solid var(--line); z-index:100; }
+.blog-app .header-inner { max-width:1440px; height:100%; padding:0 48px; margin:auto; display:flex; align-items:center; gap:40px; }
+.blog-app .site-brand { display:flex; align-items:center; gap:11px; margin-right:auto; white-space:nowrap; font-family:Georgia,"Songti SC",serif; font-size:25px; font-weight:bold; letter-spacing:-.6px; }
+.blog-app .site-brand>.blog-icon { width:26px; height:26px; color:var(--green); }
+.blog-app .brand-mark { font-weight:normal; }
+.blog-app .brand-dot { color:#88a681; }
+.blog-app .site-navigation { display:flex; align-items:center; gap:29px; }
+.blog-app .site-navigation>a { position:relative; padding:26px 0; color:var(--muted); font-size:14px; white-space:nowrap; }
+.blog-app .site-navigation>a:hover,.blog-app .site-navigation>a[aria-current] { color:var(--green); }
+.blog-app .site-navigation>a[aria-current]::after { content:""; position:absolute; bottom:13px; left:calc(50% - 2px); width:4px; height:4px; border-radius:50%; background:var(--green); }
+.blog-app .header-actions { display:flex; align-items:center; gap:20px; }
+.blog-app .icon-button { display:grid; place-items:center; border:0; width:32px; height:34px; padding:4px; background:transparent; color:var(--ink); }
+.blog-app .account-link { display:flex; align-items:center; gap:7px; font-size:13px; border-left:1px solid var(--line); padding-left:20px; }
+.blog-app .menu-toggle,.blog-app .site-navigation .mobile-account { display:none; }
+.blog-app .home-hero { position:relative; height:min(680px,76vh); min-height:500px; isolation:isolate; overflow:hidden; }
+.blog-app .hero-image { position:absolute; width:100%; height:100%; object-fit:cover; object-position:center 48%; inset:0; z-index:-3; }
+.blog-app .hero-shade { position:absolute; inset:0; z-index:-2; background:linear-gradient(180deg,rgba(19,34,27,.13),rgba(15,31,24,.36) 55%,rgba(26,43,30,.2)); }
+.blog-app .hero-copy { position:absolute; top:41%; transform:translateY(-50%); width:100%; padding:0 24px; text-align:center; color:#fff; text-shadow:0 2px 20px rgba(15,27,18,.3); }
+.blog-app .hero-kicker { font-size:11px; letter-spacing:.38em; font-weight:500; }
+.blog-app .hero-copy h1 { font-family:Georgia,"Times New Roman",serif; font-size:clamp(54px,6.8vw,100px); font-weight:normal; line-height:1.15; letter-spacing:-3px; margin:22px 0 19px; }
+.blog-app .hero-copy h1>span { color:#d5e5bf; }
+.blog-app .hero-copy p { font-family:"Songti SC","Noto Serif SC",serif; font-size:22px; letter-spacing:.28em; margin:0 0 13px; }
+.blog-app .hero-caption { font-size:12px; letter-spacing:.14em; color:rgba(255,255,255,.8); }
+.blog-app .hero-scroll { position:absolute; bottom:115px; left:50%; transform:translateX(-50%); text-align:center; color:rgba(255,255,255,.85); font-size:10px; letter-spacing:.16em; }
+.blog-app .scroll-line { display:block; height:30px; width:1px; background:rgba(255,255,255,.6); margin:12px auto 0; }
+.blog-app .hero-wave { position:absolute; bottom:-1px; left:0; width:100%; height:87px; fill:var(--paper); pointer-events:none; }
+.blog-app .wave-back { height:110px; opacity:.48; bottom:4px; }
+.blog-app .search-dock { position:relative; z-index:2; max-width:790px; padding:0 24px; margin:-32px auto 50px; }
+.blog-app .journal-search { display:flex; align-items:center; gap:17px; border-radius:17px; border:1px solid var(--line); padding:13px 14px 13px 24px; background:var(--surface); box-shadow:0 16px 40px rgba(35,60,42,.08); }
+.blog-app .journal-search>.blog-icon { color:var(--muted); width:22px; height:22px; }
+.blog-app .journal-search input { flex:1; min-width:0; border:0; background:transparent; padding:9px 0; color:var(--ink); font-size:14px; outline:none; }
+.blog-app .journal-search input::placeholder { color:var(--muted); }
+.blog-app .journal-search button { display:flex; align-items:center; gap:16px; padding:10px 18px; border:0; border-radius:10px; color:var(--green); background:var(--surface-soft); font-size:13px; }
+.blog-app .journal-search button:hover { background:var(--mint); }
+.blog-app .journal-layout { display:grid; grid-template-columns:220px minmax(0,1fr) 258px; align-items:start; gap:30px; max-width:1376px; padding:0 40px 80px; margin:auto; scroll-margin-top:104px; }
+.blog-app .author-sidebar { position:sticky; top:108px; min-width:0; }
+.blog-app .author-card { padding:26px 18px 20px; background:var(--surface); border:1px solid var(--line); border-radius:20px; text-align:center; }
+.blog-app .eyebrow { display:block; font-size:9px; font-weight:600; color:var(--muted); letter-spacing:.18em; }
+.blog-app .author-avatar { display:block; width:92px; height:92px; margin:23px auto 16px; border-radius:50%; padding:5px; border:1px solid #c4d9c7; }
+.blog-app .author-avatar img { display:block; object-fit:cover; width:100%; height:100%; border-radius:50%; }
+.blog-app .author-card h2 { font-family:Georgia,"Songti SC",serif; font-size:24px; letter-spacing:.01em; margin:0 0 8px; }
+.blog-app .author-bio { color:var(--muted); font-size:11px; line-height:1.9; margin:0 auto 22px; max-width:170px; }
+.blog-app .author-stats { display:flex; justify-content:space-around; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:15px 0; margin-bottom:20px; }
+.blog-app .author-stats>* { flex:1; display:flex; flex-direction:column; }
+.blog-app .author-stats>*+* { border-left:1px solid var(--line); }
+.blog-app .author-stats strong { font-family:Georgia,serif; font-size:20px; font-weight:normal; line-height:1.3; }
+.blog-app .author-stats span { font-size:9px; color:var(--muted); margin-top:5px; }
+.blog-app .sidebar-nav { display:flex; flex-direction:column; gap:5px; text-align:left; }
+.blog-app .sidebar-nav a { display:flex; align-items:center; gap:13px; padding:10px 13px; border-radius:9px; color:var(--muted); font-size:12px; }
+.blog-app .sidebar-nav a:hover,.blog-app .sidebar-nav a[aria-current] { background:var(--mint); color:var(--green); }
+.blog-app .sidebar-nav .blog-icon { width:17px; height:17px; }
+.blog-app .nav-chevron { margin-left:auto; font-size:16px; }
+.blog-app .author-socials { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; padding-top:22px; margin-top:16px; border-top:1px solid var(--line); font-size:9px; color:var(--muted); }
+.blog-app .author-socials a:hover { color:var(--green); }
+.blog-app .author-email,.blog-app .author-contact { display:block; font-size:9px; color:var(--muted); overflow-wrap:anywhere; margin:10px 0 0; }
+.blog-app .sidebar-note { display:flex; gap:8px; padding:19px 9px; font-size:10px; color:var(--muted); line-height:1.8; }
+.blog-app .sidebar-note .blog-icon { width:15px; }
+.blog-app .journal-feed { min-width:0; }
+.blog-app .feed-heading { display:flex; align-items:center; justify-content:space-between; margin:3px 0 22px; }
+.blog-app .feed-heading h2 { font-family:"Songti SC",Georgia,serif; font-size:26px; font-weight:600; margin:6px 0 0; }
+.blog-app .feed-heading h2 span { display:inline-block; vertical-align:middle; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; font-size:10px; font-weight:normal; color:var(--muted); letter-spacing:0; margin-left:15px; }
+.blog-app .feed-heading>.blog-icon { width:30px; height:30px; color:#9eb5a4; }
+.blog-app .category-tabs { display:flex; gap:24px; border-bottom:1px solid var(--line); margin-bottom:24px; }
+.blog-app .category-tabs a { position:relative; font-size:12px; color:var(--muted); padding:0 2px 14px; white-space:nowrap; }
+.blog-app .category-tabs a[aria-current] { color:var(--green); font-weight:600; }
+.blog-app .category-tabs a[aria-current]::after { content:""; position:absolute; bottom:-1px; left:0; right:0; height:2px; background:var(--green); }
+.blog-app .category-tabs small { font-size:9px; margin-left:5px; opacity:.7; }
+.blog-app .story-card { display:flex; overflow:hidden; border-radius:16px; border:1px solid rgba(70,119,106,.055); background:var(--aqua); margin-bottom:22px; transition:transform .2s,box-shadow .2s; }
+.blog-app .story-card:nth-of-type(even) { background:var(--aqua); }
+.blog-app .story-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(35,65,45,.065); }
+.blog-app .story-body { flex:1; min-width:0; padding:25px 27px 18px; }
+.blog-app .story-meta { display:flex; align-items:center; gap:10px; color:var(--muted); font-size:10px; margin-bottom:11px; }
+.blog-app .story-meta>a { color:var(--green); }
+.blog-app .new-label { margin-left:auto; background:rgba(255,255,255,.48); color:var(--green); border-radius:4px; padding:1px 7px; font-size:9px; }
+.blog-app .story-card h3 { font-family:"Songti SC","Noto Serif SC",serif; font-size:20px; font-weight:600; line-height:1.65; letter-spacing:.015em; margin:0 0 10px; overflow-wrap:anywhere; }
+.blog-app .story-card h3 a:hover { color:var(--green); }
+.blog-app .story-excerpt { color:var(--muted); font-size:12px; line-height:1.95; margin:0 0 18px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.blog-app .story-bottom { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.blog-app .story-tags { display:flex; flex-wrap:wrap; gap:10px; color:var(--green); opacity:.8; font-size:10px; }
+.blog-app .story-read { border:1px solid rgba(70,119,106,.2); display:grid; place-items:center; border-radius:50%; width:28px; height:28px; flex-shrink:0; color:var(--green); }
+.blog-app .story-read .blog-icon { width:15px; height:15px; }
+.blog-app .story-cover { width:29%; flex-shrink:0; }
+.blog-app .story-cover img { display:block; width:100%; height:100%; object-fit:cover; }
+.blog-app .reading-rail { display:flex; flex-direction:column; gap:22px; min-width:0; }
+.blog-app .rail-card { background:var(--surface); border:1px solid var(--line); border-radius:17px; padding:20px; box-shadow:none; backdrop-filter:none; margin:0; }
+.blog-app .section-label { display:flex; justify-content:space-between; align-items:center; color:var(--ink); font-size:12px; font-weight:500; margin-bottom:20px; gap:6px; }
+.blog-app .section-label>span { display:flex; align-items:center; gap:9px; }
+.blog-app .section-label .blog-icon { width:16px; height:16px; color:var(--green); }
+.blog-app .section-label>a { color:var(--muted); font-size:16px; }
+.blog-app .player-info { gap:13px; margin-bottom:20px; }
+.blog-app .disc { width:62px; height:62px; flex-shrink:0; padding:0; background:none; overflow:hidden; border-radius:50%; box-shadow:0 3px 10px #0001; }
+.blog-app .disc::after { display:none; }
+.blog-app .song-name { font-size:13px; line-height:1.6; color:var(--ink); white-space:normal; }
+.blog-app .song-artist { font-size:10px; margin-top:4px; color:var(--muted); }
+.blog-app .progress-bar { height:3px; background:var(--line); cursor:pointer; }
+.blog-app .progress-fill { background:var(--green); }
+.blog-app .time-display { font-family:monospace; font-size:9px; color:var(--muted); margin-top:9px; }
+.blog-app .player-controls { margin:12px 0 0; gap:25px; }
+.blog-app .player-controls button { color:var(--muted); font-size:13px; }
+.blog-app .player-controls .play-btn { width:35px; height:35px; background:var(--mint); color:var(--green); border:0; box-shadow:none; font-size:13px; }
+.blog-app .mini-playlist { border-top:1px solid var(--line); margin-top:18px; padding-top:10px; }
+.blog-app .mini-playlist summary { cursor:pointer; font-size:10px; color:var(--muted); }
+.blog-app .playlist { margin-top:10px; max-height:210px; }
+.blog-app .playlist-item { display:block; width:100%; border:0; text-align:left; color:var(--muted); background:transparent; font-size:11px; padding:9px; cursor:pointer; }
+.blog-app .playlist-item.active,.blog-app .playlist-item:hover { background:var(--mint); color:var(--green); }
+.blog-app .weather-city-picker { margin:0; font-size:10px; color:var(--muted); }
+.blog-app .weather-city-picker button { background:var(--surface-soft); border-color:var(--line); color:var(--green); width:19px; height:19px; }
+.blog-app .weather-top { margin:0; display:flex; align-items:center; justify-content:space-between; }
+.blog-app .weather-left { text-align:left; }
+.blog-app .weather-icon { display:inline-block; font-size:27px; vertical-align:middle; }
+.blog-app .weather-temp { display:inline-block; font-family:Georgia,serif; font-size:30px; margin-left:5px; color:var(--ink); vertical-align:middle; }
+.blog-app .weather-desc { margin-top:6px; font-size:10px; color:var(--muted); }
+.blog-app .weather-right { padding:0 0 0 24px; border-left:1px solid var(--line); text-align:center; }
+.blog-app .calendar-date { font-family:Georgia,serif; font-size:32px; color:var(--ink); line-height:1.15; }
+.blog-app .calendar-weekday,.blog-app .calendar-lunar { color:var(--muted); font-size:9px; }
+.blog-app .weather-forecast { margin:16px 0 0; padding-top:13px; border-top:1px solid var(--line); gap:8px; }
+.blog-app .weather-forecast:empty { display:none; }
+.blog-app .forecast-item { font-size:9px; color:var(--muted); }
+.blog-app .forecast-item .f-icon { font-size:16px; }
+.blog-app .forecast-item .f-temp { font-size:9px; color:var(--muted); }
+.blog-app .recent-entry { display:flex; gap:12px; margin-bottom:18px; line-height:1.7; font-size:11px; }
+.blog-app .recent-entry:last-child { margin:0; }
+.blog-app .recent-entry:hover { color:var(--green); }
+.blog-app .entry-number { font-family:Georgia,serif; color:#a8bab0; font-size:17px; line-height:1.25; }
+.blog-app .recent-entry time { display:block; color:var(--muted); font-size:9px; margin-top:5px; }
+.blog-app .tag-cloud { display:flex; flex-wrap:wrap; gap:8px; }
+.blog-app .tag-cloud a { display:inline-flex; align-items:center; gap:7px; font-size:10px; color:var(--muted); border:1px solid var(--line); border-radius:7px; padding:5px 9px; background:var(--surface); }
+.blog-app .tag-cloud a:hover { color:var(--green); border-color:var(--green); }
+.blog-app .tag-cloud small { color:var(--muted); font-size:9px; opacity:.7; }
+.blog-app .journal-pagination { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding-top:18px; font-size:11px; }
+.blog-app .journal-pagination a { min-width:34px; height:34px; padding:5px 11px; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+.blog-app .journal-pagination a[aria-current] { color:var(--surface); background:var(--green); border-color:var(--green); }
+.blog-app .page-intro { max-width:1296px; margin:0 auto; padding:56px 40px 20px; }
+.blog-app .page-intro h1 { font-family:"Songti SC",Georgia,serif; font-size:34px; margin:10px 0 8px; }
+.blog-app .page-intro p { font-size:12px; color:var(--muted); }
+.blog-app .compact-search { max-width:1376px; padding:0 40px; margin:18px auto 44px; }
+.blog-app .compact-search .journal-search { max-width:746px; box-shadow:none; }
+.blog-app .filter-note { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:20px; }
+.blog-app .filter-note a { color:var(--green); }
+.blog-app .blank-panel,.blog-app .archive-panel,.blog-app .tags-panel { padding:30px; border:1px solid var(--line); border-radius:17px; background:var(--surface); }
+.blog-app .blank-panel { padding:70px 20px; text-align:center; }
+.blog-app .blank-panel>.blog-icon { width:32px; height:32px; color:var(--muted); }
+.blog-app .blank-panel h3 { font-size:18px; margin:20px 0 10px; }
+.blog-app .blank-panel p,.blog-app .text-link { font-size:12px; color:var(--muted); }
+.blog-app .text-link { display:inline-block; color:var(--green); margin-top:20px; }
+.blog-app .panel-intro { font-size:12px; color:var(--muted); margin-bottom:30px; }
+.blog-app .archive-year { font-family:Georgia,serif; font-size:29px; font-weight:normal; margin:25px 0 12px; }
+.blog-app .archive-entry { position:relative; display:flex; align-items:center; gap:17px; padding:17px 0; font-size:13px; }
+.blog-app .archive-entry time { color:var(--muted); font-size:10px; white-space:nowrap; width:50px; flex-shrink:0; }
+.blog-app .timeline-dot { position:relative; border:2px solid #99b6a6; background:var(--surface); border-radius:50%; width:9px; height:9px; flex-shrink:0; z-index:1; }
+.blog-app .archive-entry::before { content:""; position:absolute; top:0; bottom:0; left:71px; width:1px; background:var(--line); }
+.blog-app .archive-entry:hover { color:var(--green); }
+.blog-app .archive-category { margin-left:auto; font-size:9px; color:var(--muted); white-space:nowrap; }
+.blog-app .category-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.blog-app .category-tile { display:block; padding:27px; border:1px solid var(--line); border-radius:16px; background:var(--mint); }
+.blog-app .category-tech,.blog-app .category-music { background:var(--aqua); }
+.blog-app .category-tile>.blog-icon { width:28px; height:28px; color:var(--green); }
+.blog-app .category-tile h3 { font-family:"Songti SC",serif; font-size:23px; margin:18px 0 5px; }
+.blog-app .category-tile p { font-size:11px; color:var(--muted); }
+.blog-app .category-tile>span { display:flex; justify-content:space-between; margin-top:25px; font-size:10px; color:var(--green); }
+.blog-app .category-tile:hover { border-color:var(--green); }
+.blog-app .large-tags { gap:12px; }
+.blog-app .large-tags a { font-size:14px; padding:8px 12px; }
+.blog-app .tag-constellation { margin-top:30px; }
+.blog-app .tag-constellation canvas { display:block; width:100%; height:420px; max-width:100%; border-radius:12px; touch-action:pan-y; }
+.blog-app .site-footer { position:relative; border-top:1px solid var(--line); max-width:1296px; margin:auto; padding:34px 24px 28px; text-align:center; }
+.blog-app .footer-brand { font:21px Georgia,serif; }
+.blog-app .footer-brand span { color:var(--green); }
+.blog-app .site-footer p { font-size:10px; color:var(--muted); margin:10px 0 5px; letter-spacing:.1em; }
+.blog-app .site-footer small { font-size:9px; color:var(--muted); }
+.blog-app .back-to-top { position:absolute; top:38px; right:20px; width:34px; height:34px; border:1px solid var(--line); border-radius:50%; display:grid; place-items:center; color:var(--green); }
+.blog-app .city-picker-dialog { background:var(--surface); }
+.blog-app .city-search { color:var(--ink); background:var(--surface-soft); }
+.blog-app .city-list button,.blog-app .city-letters button { color:var(--ink); background:var(--surface-soft); border-color:var(--line); }
+/* Shared reading, music, about and chat pages. */
+.blog-app .reading-layout { display:grid; grid-template-columns:minmax(0,800px) 220px; gap:40px; max-width:1140px; margin:0 auto; padding:40px 40px 80px; align-items:start; }
+.blog-app .reading-main { min-width:0; }
+.blog-app .breadcrumbs { display:flex; gap:10px; font-size:11px; color:var(--muted); margin-bottom:25px; }
+.blog-app .post-detail { padding:40px 44px; border:1px solid var(--line); background:var(--surface); border-radius:17px; box-shadow:none; backdrop-filter:none; }
+.blog-app .post-detail h1 { font-family:"Songti SC",Georgia,serif; font-size:30px; line-height:1.7; margin:20px 0 30px; color:var(--ink); }
+.blog-app .post-detail .post-meta { font-size:11px; padding:0; border:0; margin:0; }
+.blog-app .post-cat { color:var(--green); background:var(--mint); }
+.blog-app .post-detail .post-content { font-size:15px; line-height:2; overflow-wrap:anywhere; color:var(--ink); }
+.blog-app .post-detail .post-content h2 { font-size:23px; }
+.blog-app .post-detail .post-content h3 { font-size:19px; }
+.blog-app .post-detail .post-content a { color:var(--green); text-decoration:underline; text-underline-offset:3px; }
+.blog-app .post-detail pre,.blog-app .post-detail code { background:var(--surface-soft); color:var(--ink); }
+.blog-app .post-detail pre code { padding:0; }
+.blog-app .post-detail .post-content table { display:block; max-width:100%; overflow:auto; }
+.blog-app .post-export-links { border-top:1px solid var(--line); margin-top:35px; padding-top:20px; color:var(--muted); font-size:11px; }
+.blog-app .post-export-links a { color:var(--green); }
+.blog-app .comment-item { background:var(--surface-soft); }
+.blog-app .comment-form textarea { background:var(--surface-soft); color:var(--ink); border:1px solid var(--line); }
+.blog-app .btn { background:var(--green); color:var(--paper); box-shadow:none; }
+.blog-app .toc-sidebar { position:sticky; top:110px; padding-top:40px; }
+.blog-app .toc-heading { font-size:12px; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+.blog-app .article-toc { border-left:1px solid var(--line); display:flex; flex-direction:column; gap:12px; padding-left:18px; font-size:11px; color:var(--muted); max-height:65vh; overflow:auto; }
+.blog-app .article-toc a:hover { color:var(--green); }
+.blog-app .article-toc .toc-sub { padding-left:12px; font-size:10px; }
+.blog-app .toc-back { display:block; color:var(--green); font-size:11px; margin-top:24px; }
+.blog-app .music-page { max-width:1100px; padding:0 40px 80px; margin:0 auto; }
+.blog-app .music-grid { display:grid; grid-template-columns:300px minmax(0,1fr); align-items:start; gap:30px; }
+.blog-app .music-grid .player-card { position:sticky; top:110px; }
+.blog-app .music-grid .disc { width:100px; height:100px; margin:auto; }
+.blog-app .music-grid .player-info { display:flex; flex-direction:column; text-align:center; margin:30px 0; }
+.blog-app .music-grid .mini-playlist { display:none; }
+.blog-app .music-track-list { padding:15px; background:var(--surface); border:1px solid var(--line); border-radius:17px; }
+.blog-app .music-track-list .playlist-item { display:flex; align-items:center; gap:18px; padding:15px 18px; border-radius:10px; font-size:13px; }
+.blog-app .track-number { width:25px; color:var(--muted); font-family:Georgia,serif; }
+.blog-app .track-info { display:flex; flex:1; flex-direction:column; }
+.blog-app .track-info small { color:var(--muted); font-size:10px; margin-top:2px; }
+.blog-app .track-play { color:var(--green); font-size:10px; }
+.blog-app .music-heading { display:flex; justify-content:space-between; margin-bottom:18px; align-items:center; }
+.blog-app .music-heading h2 { font-size:17px; font-weight:500; }
+.blog-app .music-heading span { font-size:11px; color:var(--muted); }
+.blog-app .about-layout { max-width:980px; padding:30px 40px 80px; margin:auto; }
+.blog-app .about-banner { height:250px; width:100%; object-fit:cover; object-position:center 42%; border-radius:17px; margin-bottom:25px; }
+.blog-app .about-copy { max-width:620px; padding:15px 0 25px; }
+.blog-app .about-copy h2 { font-family:"Songti SC",serif; font-size:28px; margin-bottom:25px; }
+.blog-app .about-copy p { line-height:2; margin-bottom:18px; color:var(--muted); font-size:14px; }
+.blog-app .about-links { display:flex; gap:12px; margin-top:25px; }
+.blog-app .about-links a { border:1px solid var(--line); background:var(--surface); padding:9px 18px; border-radius:8px; color:var(--green); font-size:12px; }
+.blog-app .chat-layout { padding-top:30px; height:calc(100dvh - 78px); }
+.blog-app .chat-card { backdrop-filter:none; }
+.blog-app .chat-input { background:var(--surface-soft); color:var(--ink); }
+@media(min-width:1600px) { .blog-app .home-hero { height:730px; max-height:78vh; } }
+@media(max-width:1200px) { .blog-app .header-inner { padding:0 28px; gap:25px; } .blog-app .site-navigation { gap:21px; } .blog-app .journal-layout { grid-template-columns:190px minmax(0,1fr) 225px; gap:22px; padding-left:28px; padding-right:28px; } .blog-app .rail-card { padding:17px; } .blog-app .author-card { padding-left:13px; padding-right:13px; } .blog-app .story-body { padding:23px; } }
+@media(max-width:1020px) { .blog-app .journal-layout { grid-template-columns:200px minmax(0,1fr); max-width:930px; gap:28px; } .blog-app .reading-rail { grid-column:2; display:grid; grid-template-columns:1fr 1fr; } .blog-app .author-sidebar { grid-row:1 / span 2; } .blog-app .site-brand { font-size:22px; } .blog-app .site-navigation { gap:18px; } .blog-app .header-actions { gap:10px; } .blog-app .account-link { border:0; padding-left:0; } .blog-app .account-link span { display:none; } .blog-app .reading-layout { grid-template-columns:minmax(0,1fr) 180px; gap:25px; } }
+@media(max-width:800px) { .blog-app .header-inner { padding:0 22px; gap:10px; } .blog-app .site-header { height:68px; } .blog-app .site-navigation { display:none; position:absolute; top:67px; left:0; width:100%; background:var(--surface); padding:16px 22px; border-bottom:1px solid var(--line); box-shadow:0 20px 25px #0001; grid-template-columns:repeat(4,1fr); gap:10px; } .blog-app .site-navigation.is-open { display:grid; } .blog-app .site-navigation>a,.blog-app .site-navigation .mobile-account { display:block; padding:10px 0; text-align:center; font-size:13px; } .blog-app .site-navigation>a[aria-current]::after { bottom:3px; } .blog-app .menu-toggle { display:grid; } .blog-app .header-actions { gap:12px; } .blog-app .account-link { display:none; } .blog-app .home-hero { min-height:480px; height:65vh; max-height:640px; } .blog-app .hero-copy h1 { font-size:66px; } .blog-app .hero-copy p { font-size:18px; } .blog-app .hero-copy { top:40%; } .blog-app .journal-layout { grid-template-columns:165px minmax(0,1fr); gap:22px; padding:0 22px 60px; } .blog-app .author-card { padding-left:10px; padding-right:10px; } .blog-app .author-card .eyebrow { font-size:8px; } .blog-app .sidebar-nav a { gap:9px; padding-left:10px; } .blog-app .author-socials { gap:10px; } .blog-app .reading-rail { gap:15px; } .blog-app .reading-layout { grid-template-columns:1fr; padding:25px 22px 60px; } .blog-app .toc-sidebar { display:none; } .blog-app .post-detail { padding:30px; } .blog-app .category-tabs { gap:17px; } .blog-app .category-grid { gap:14px; } .blog-app .category-tile { padding:22px; } .blog-app .story-cover { width:26%; } .blog-app .story-card.has-cover .story-body { padding:20px; } .blog-app .story-card h3 { font-size:19px; } .blog-app .music-grid { grid-template-columns:250px minmax(0,1fr); gap:20px; } .blog-app .music-page { padding-left:22px; padding-right:22px; } .blog-app .chat-layout { height:calc(100dvh - 68px); } }
+@media(max-width:620px) { html { scroll-padding-top:85px; } .blog-app .site-brand { font-size:22px; gap:8px; } .blog-app .site-brand>.blog-icon { width:23px; height:23px; } .blog-app .header-inner { padding:0 20px; } .blog-app .header-actions { gap:8px; } .blog-app .home-hero { height:590px; max-height:78svh; min-height:440px; } .blog-app .hero-image { object-position:50% center; } .blog-app .hero-copy { top:39%; } .blog-app .hero-copy h1 { font-size:46px; letter-spacing:-1.5px; margin:20px 0; } .blog-app .hero-kicker { font-size:9px; letter-spacing:.25em; } .blog-app .hero-copy p { font-size:17px; letter-spacing:.15em; } .blog-app .hero-caption { font-size:10px; letter-spacing:.07em; } .blog-app .hero-scroll { bottom:115px; font-size:9px; } .blog-app .hero-wave { height:64px; } .blog-app .wave-back { height:88px; } .blog-app .search-dock { padding:0 20px; margin-top:-24px; margin-bottom:36px; } .blog-app .journal-search { padding:9px 9px 9px 17px; gap:12px; border-radius:13px; } .blog-app .journal-search input { font-size:12px; padding:7px 0; } .blog-app .journal-search button { padding:9px 12px; font-size:11px; } .blog-app .journal-search button>.blog-icon { display:none; } .blog-app .journal-search>.blog-icon { width:18px; height:18px; } .blog-app .journal-layout { display:flex; flex-direction:column; padding:0 20px 50px; gap:30px; } .blog-app .journal-feed { order:0; width:100%; } .blog-app .author-sidebar { order:1; width:100%; position:static; } .blog-app .reading-rail { order:2; width:100%; grid-template-columns:1fr; gap:18px; } .blog-app .author-card { padding:25px; } .blog-app .author-avatar { margin-top:17px; } .blog-app .author-bio { max-width:100%; } .blog-app .author-stats { max-width:260px; margin:0 auto 20px; } .blog-app .sidebar-nav { display:grid; grid-template-columns:1fr 1fr; gap:7px 15px; } .blog-app .author-socials { font-size:11px; gap:25px; } .blog-app .author-email,.blog-app .author-contact { font-size:10px; } .blog-app .sidebar-note { display:none; } .blog-app .feed-heading { margin-bottom:22px; } .blog-app .feed-heading h2 { font-size:25px; } .blog-app .feed-heading h2 span { font-size:10px; margin-left:12px; } .blog-app .eyebrow { font-size:8px; } .blog-app .category-tabs { gap:0; justify-content:space-between; } .blog-app .category-tabs a { padding:0 3px 13px; font-size:12px; } .blog-app .story-card { margin-bottom:18px; border-radius:13px; } .blog-app .story-body { padding:23px 22px 18px; } .blog-app .story-card h3 { font-size:20px; } .blog-app .story-card.has-cover { flex-direction:column-reverse; } .blog-app .story-cover { width:100%; height:155px; } .blog-app .story-card.has-cover .story-body { padding:22px; } .blog-app .story-excerpt { font-size:12px; line-height:1.9; } .blog-app .rail-card { padding:23px; } .blog-app .reading-rail .weather-top { justify-content:space-around; } .blog-app .weather-right { padding-left:40px; } .blog-app .recent-entry { font-size:12px; } .blog-app .tag-cloud a { font-size:11px; } .blog-app .page-intro { padding:36px 22px 15px; } .blog-app .page-intro h1 { font-size:29px; line-height:1.5; } .blog-app .page-intro p { font-size:11px; } .blog-app .compact-search { margin-top:12px; } .blog-app .archive-panel,.blog-app .tags-panel { padding:23px 18px; } .blog-app .archive-entry { gap:13px; font-size:12px; } .blog-app .archive-entry time { width:43px; font-size:9px; } .blog-app .archive-entry::before { left:60px; } .blog-app .archive-category { display:none; } .blog-app .large-tags a { font-size:12px; }  .blog-app .category-grid { gap:13px; } .blog-app .category-tile { padding:23px 20px; } .blog-app .category-tile h3 { font-size:23px; } .blog-app .category-tile p { font-size:10px; } .blog-app .post-detail { padding:25px 22px; border-radius:13px; } .blog-app .post-detail h1 { font-size:25px; margin-bottom:24px; } .blog-app .post-detail .post-content { font-size:14px; } .blog-app .reading-layout { padding-left:18px; padding-right:18px; } .blog-app .music-grid { grid-template-columns:1fr; } .blog-app .music-grid .player-card { position:static; } .blog-app .music-grid .player-info { flex-direction:row; text-align:left; margin:20px 0; } .blog-app .music-grid .disc { margin:0; width:75px; height:75px; } .blog-app .music-track-list { padding:10px; } .blog-app .music-track-list .playlist-item { padding:13px 10px; gap:13px; } .blog-app .about-layout { padding:15px 22px 50px; } .blog-app .about-banner { height:210px; } .blog-app .site-footer { margin:0 20px; padding-left:10px; padding-right:10px; } .blog-app .back-to-top { right:0; } .blog-app .site-footer p { font-size:9px; letter-spacing:0; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } .blog-app *, .blog-app *::before,.blog-app *::after { animation:none!important; transition:none!important; } }
+/* Cool forest greens and the blue-green cards from the original GitHub blog. */
+body.blog-app { --paper:#f3f8f5; --surface:#fff; --surface-soft:#e8f1ec; --ink:#263f36; --muted:#637a70; --line:#dbe7df; --green:#3f7460; --mint:#e0ece5; --aqua:#d3e6e9; }
+body.blog-app[data-theme="dark"] { --paper:#172321; --surface:#202f2b; --surface-soft:#293934; --ink:#e0e9e2; --muted:#a1b1a9; --line:#35473f; --green:#a0c7b3; --mint:#2b443b; --aqua:#293e3d; }
+.blog-app .site-header { background:color-mix(in srgb,var(--surface) 93%,transparent); backdrop-filter:blur(16px); border-bottom-color:transparent; }
+.blog-app .home-hero { height:660px; min-height:520px; }
+.blog-app .hero-image { filter:saturate(.9) contrast(1.02) brightness(.9); object-position:center 47%; }
+.blog-app .hero-shade { background:linear-gradient(0deg,var(--paper),transparent 14%),linear-gradient(180deg,rgba(6,27,17,.1),rgba(6,27,17,.27) 55%,rgba(6,27,17,.12)); }
+.blog-app .hero-copy { top:39%; text-shadow:0 3px 24px rgba(30,39,26,.18); }
+.blog-app .hero-kicker { display:inline-flex; align-items:center; gap:18px; font-size:10px; letter-spacing:.27em; opacity:.9; }
+.blog-app .hero-kicker::before,.blog-app .hero-kicker::after { content:""; width:32px; height:1px; background:rgba(255,255,255,.6); }
+.blog-app .hero-copy h1 { font-size:clamp(52px,6.2vw,88px); font-weight:normal; letter-spacing:-2px; margin:22px 0 23px; }
+.blog-app .hero-copy p { font-size:20px; font-weight:300; letter-spacing:.25em; }
+.blog-app .hero-caption { font-size:11px; color:rgba(255,255,255,.82); letter-spacing:.13em; }
+.blog-app .hero-scroll { bottom:112px; color:rgba(255,255,255,.78); }
+.blog-app .hero-wave { height:45px; }
+.blog-app .wave-back { height:66px; bottom:8px; opacity:.3; }
+.blog-app .search-dock:not(.compact-search) { margin-top:-36px; margin-bottom:54px; }
+.blog-app .journal-search { border-color:var(--line); background:var(--surface); box-shadow:0 16px 40px rgba(35,70,50,.055); }
+.blog-app .player-controls .play-btn { background:var(--mint)!important; color:var(--green)!important; }
+.blog-app .album-art { display:block; width:100%; height:100%; object-fit:cover; object-position:center; border-radius:0; transform:scale(1.16); filter:none; }
+.blog-app .disc { background:#fff; clip-path:circle(50%); isolation:isolate; }
+.blog-app .story-card h3 { font-size:21px; }
+.blog-app .story-excerpt { font-size:13px; }
+.blog-app .story-meta { font-size:11px; }
+@media(min-width:1600px) { .blog-app .home-hero { height:730px; } }
+@media(max-width:800px) { .blog-app .home-hero { height:600px; min-height:480px; } .blog-app .hero-copy h1 { font-size:64px; } }
+@media(max-width:620px) { .blog-app .home-hero { height:560px; min-height:450px; max-height:76svh; } .blog-app .hero-image { object-position:50% center; } .blog-app .hero-shade { background:linear-gradient(0deg,var(--paper),transparent 14%),linear-gradient(180deg,rgba(6,27,17,.1),rgba(6,27,17,.27) 55%,rgba(6,27,17,.12)); } .blog-app .hero-copy { top:39%; } .blog-app .hero-copy h1 { font-size:46px; margin:23px 0; letter-spacing:-1.5px; } .blog-app .hero-copy p { font-size:16px; } .blog-app .hero-kicker { font-size:8px; gap:12px; letter-spacing:.2em; } .blog-app .hero-kicker::before,.blog-app .hero-kicker::after { width:22px; } .blog-app .hero-caption { font-size:10px; letter-spacing:.05em; } .blog-app .hero-scroll { bottom:100px; } .blog-app .search-dock:not(.compact-search) { margin-top:-29px; margin-bottom:38px; } .blog-app .story-card h3 { font-size:20px; } .blog-app .story-excerpt { font-size:12px; } }
+.blog-app .constellation-toolbar { display:flex; justify-content:space-between; align-items:center; gap:15px; margin:0 0 8px; color:var(--muted); font-size:10px; }
+.blog-app .constellation-toolbar i { display:inline-block; width:5px; height:5px; background:var(--green); border-radius:50%; vertical-align:middle; margin-right:5px; }
+.blog-app .constellation-toolbar button { border:1px solid var(--line); background:var(--surface-soft); color:var(--green); padding:5px 10px; border-radius:6px; font-size:10px; }
+/* The music player and library share one centered, bounded listening area. */
+.blog-app.music-view .page-intro { max-width:1100px; text-align:center; padding-top:48px; }
+.blog-app.music-view .compact-search { max-width:1100px; margin:20px auto 36px; }
+.blog-app.music-view .journal-search { max-width:790px; margin:0 auto; }
+.blog-app .music-grid { grid-template-columns:300px minmax(0,1fr); align-items:stretch; gap:28px; }
+.blog-app .music-grid>.player-card { position:static; height:440px; padding:25px; display:flex; flex-direction:column; }
+.blog-app .music-grid .player-info { flex:1; justify-content:center; flex-direction:column; gap:20px; margin:16px 0 25px; }
+.blog-app .music-grid .disc { width:110px; height:110px; margin:0 auto; }
+.blog-app .music-grid .song-name { font-size:17px; }
+.blog-app .music-grid .song-artist { font-size:12px; margin-top:7px; }
+.blog-app .music-grid .player-controls { margin:5px 0 3px; gap:35px; }
+.blog-app .music-grid .player-controls .play-btn { width:42px; height:42px; }
+.blog-app .music-library { display:flex; flex-direction:column; height:440px; min-width:0; padding:24px; border:1px solid var(--line); border-radius:17px; background:var(--surface); }
+.blog-app .music-library .music-heading { flex-shrink:0; margin:0 0 12px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+.blog-app .music-library .music-track-list { min-height:0; flex:1; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#b9c8bc transparent; border:0; border-radius:0; padding:0 8px 0 0; background:transparent; }
+.blog-app .music-library .playlist-item { padding:12px 14px; }
+.blog-app .music-library .music-track-list::-webkit-scrollbar { width:5px; }
+.blog-app .music-library .music-track-list::-webkit-scrollbar-thumb { background:#b9c8bc; border-radius:10px; }
+@media(max-width:800px) { .blog-app .music-grid { grid-template-columns:250px minmax(0,1fr); gap:20px; } .blog-app .music-library { padding:20px; } }
+@media(max-width:620px) { .blog-app.music-view .page-intro { padding-top:36px; } .blog-app.music-view .compact-search { margin:14px auto 26px; } .blog-app .music-grid { grid-template-columns:1fr; gap:20px; } .blog-app .music-grid>.player-card { height:340px; padding:22px; } .blog-app .music-grid .player-info { flex-direction:column; margin:10px 0 18px; gap:14px; text-align:center; } .blog-app .music-grid .disc { width:85px; height:85px; } .blog-app .music-grid .song-name { font-size:16px; } .blog-app .music-grid .song-artist { margin-top:3px; font-size:11px; } .blog-app .music-library { height:340px; padding:20px 16px; } .blog-app .music-library .playlist-item { padding:11px 9px; } }
+/* Account and authoring workspaces use the same paper, type and controls. */
+.blog-app .workspace-header-links { display:flex; align-items:center; gap:23px; color:var(--muted); font-size:12px; }
+.blog-app .workspace-header-links a:hover { color:var(--green); }
+.blog-app .admin-layout { padding:40px 32px 70px; max-width:1200px; min-height:calc(100svh - 255px); }
+.blog-app .admin-shell { display:grid; grid-template-columns:220px minmax(0,1fr); gap:28px; align-items:start; }
+.blog-app .admin-sidebar { width:auto; position:sticky; top:108px; background:var(--surface); border:1px solid var(--line); box-shadow:none; backdrop-filter:none; padding:23px 15px; border-radius:17px; }
+.blog-app .admin-sidebar-title { color:var(--ink); font-family:"Songti SC",serif; font-size:21px; padding:0 10px 20px; border-color:var(--line); margin-bottom:16px; }
+.blog-app .admin-nav { color:var(--muted); border-radius:9px; font-size:13px; padding:12px 14px; }
+.blog-app .admin-nav:hover,.blog-app .admin-nav.active { background:var(--mint); color:var(--green); border-color:transparent; }
+.blog-app .admin-content { min-width:0; }
+.blog-app .admin-card { padding:32px; background:var(--surface); border:1px solid var(--line); border-radius:17px; box-shadow:none; backdrop-filter:none; }
+.blog-app .admin-card h1,.blog-app .admin-card h2 { color:var(--ink); font-family:"Songti SC",Georgia,serif; font-weight:600; }
+.blog-app .admin-card h2 { font-size:23px; margin-bottom:25px; }
+.blog-app .admin-card h3 { color:var(--ink); }
+.blog-app .admin-card p { color:var(--muted); }
+.blog-app .admin-hint,.blog-app .form-help { color:var(--muted); font-size:11px; }
+.blog-app .admin-empty { background:var(--surface); color:var(--muted); border:1px dashed var(--line); backdrop-filter:none; }
+.blog-app .form-group { margin-bottom:21px; min-width:0; }
+.blog-app .form-group label { color:var(--ink); font-size:12px; margin-bottom:8px; }
+.blog-app .form-group input,.blog-app .form-group select,.blog-app .form-group textarea { background:var(--paper); border:1px solid var(--line); color:var(--ink); font-size:14px; min-width:0; padding:11px 13px; border-radius:8px; }
+.blog-app .form-group input:focus,.blog-app .form-group select:focus,.blog-app .form-group textarea:focus { border-color:var(--green); box-shadow:0 0 0 3px color-mix(in srgb,var(--mint) 60%,transparent); }
+.blog-app .form-group input[type="file"] { font-size:12px; padding:9px; }
+.blog-app .form-group input::file-selector-button { background:var(--mint); border:0; border-radius:5px; padding:6px 10px; color:var(--green); margin-right:12px; }
+.blog-app .form-group .avatar-upload-btn,.blog-app .form-group .btn { color:var(--paper); font-size:12px; margin-bottom:0; }
+.blog-app .form-group .toolbar-btn { background:var(--surface-soft); color:var(--green); border:1px solid var(--line); box-shadow:none; }
+.blog-app .btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 20px; border:1px solid transparent; border-radius:8px; background:var(--green); color:var(--paper); box-shadow:none; font-size:12px; }
+.blog-app .btn:hover { box-shadow:none; }
+.blog-app .btn-sm { padding:6px 13px; font-size:11px; border-radius:6px; white-space:nowrap; }
+.blog-app .btn-danger { background:#f7e9e5; border-color:#f0dad2; color:#ad6855; }
+.blog-app .markdown-editor { box-shadow:none; }
+.blog-app .markdown-preview { background:var(--paper); color:var(--ink); border-color:var(--line); overflow-wrap:anywhere; }
+.blog-app .markdown-preview pre { background:var(--surface-soft); }
+.blog-app .post-list-item { padding:18px 0; border-bottom:1px solid var(--line); font-size:13px; }
+.blog-app .post-list-item>div:first-child,.blog-app .post-list-title { min-width:0; overflow-wrap:anywhere; }
+.blog-app .post-list-title { font-size:13px; }
+.blog-app .post-list-actions { flex-shrink:0; }
+.blog-app .workspace-header { margin-bottom:25px; }
+.blog-app .management-view .workspace-header p { font-size:12px; }
+.blog-app.auth-view .admin-layout { display:grid; place-items:center; padding:55px 24px; }
+.blog-app.auth-view .account-card { width:100%; max-width:460px; margin:0 auto; padding:40px; }
+.blog-app.auth-view .account-card>.eyebrow { margin-bottom:10px; color:var(--green); }
+.blog-app.auth-view .account-card h2 { font-size:28px; margin-bottom:15px; }
+.blog-app.auth-view .account-intro { font-size:12px; line-height:1.9; margin:0 0 29px; }
+.blog-app.auth-view .login-form { max-width:none; }
+.blog-app.auth-view .login-submit { width:100%; margin-top:3px; min-height:43px; }
+.blog-app.auth-view .account-links { font-size:11px; margin-top:23px; color:var(--muted); }
+.blog-app .form-error { border-radius:7px; padding:10px 12px; background:#faece6; color:#a45c46!important; font-size:12px; }
+.blog-app .admin-section .admin-music-list { max-height:420px; overflow-y:auto; padding-right:8px; scrollbar-width:thin; }
+@media(max-width:800px) { .blog-app .admin-layout { padding:28px 22px 55px; } .blog-app .admin-shell { grid-template-columns:1fr; gap:22px; } .blog-app .admin-sidebar { position:static; padding:20px; } .blog-app .admin-sidebar-title { font-size:22px; padding:0 0 15px; margin-bottom:12px; } .blog-app .admin-menu { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; } .blog-app .admin-nav { text-align:center; padding:10px 7px; font-size:12px; } .blog-app .profile-form-grid { grid-template-columns:1fr 1fr; } .blog-app .profile-form-wide { grid-column:1/-1; } .blog-app .admin-card { padding:27px; } }
+@media(max-width:620px) { .blog-app .workspace-header-links { gap:13px; font-size:10px; } .blog-app .workspace-header-links a:nth-last-of-type(2) { display:none; } .blog-app .workspace-header-links .icon-button { width:25px; } .blog-app .workspace-header-links .blog-icon { width:17px; } .blog-app .management-view .site-brand,.blog-app.auth-view .site-brand { font-size:19px; gap:6px; } .blog-app .management-view .site-brand>.blog-icon,.blog-app.auth-view .site-brand>.blog-icon { width:19px; } .blog-app .admin-layout { padding:25px 18px 45px; } .blog-app .admin-card { padding:25px 21px; border-radius:13px; } .blog-app .admin-card h2 { font-size:23px; } .blog-app .profile-form-grid { grid-template-columns:1fr; } .blog-app .profile-form-wide { grid-column:auto; } .blog-app .post-list-item { flex-wrap:wrap; gap:12px; } .blog-app .post-list-item>div:first-child { width:100%; } .blog-app .post-list-actions { margin-left:auto; } .blog-app .avatar-upload-row { align-items:stretch; flex-wrap:wrap; } .blog-app .avatar-upload-row>input { flex-basis:100%; } .blog-app.auth-view .admin-layout { padding:35px 20px; min-height:calc(100svh - 244px); } .blog-app.auth-view .account-card { padding:30px 25px; } .blog-app.auth-view .account-card h2 { font-size:26px; } .blog-app .editor-toolbar { gap:6px; } .blog-app .form-group .toolbar-btn { padding:7px 10px; font-size:11px; } }
+.blog-app .form-group .image-upload-button { background:var(--green); color:var(--paper); display:inline-flex; align-items:center; justify-content:center; padding:8px 14px; cursor:pointer; font-size:12px; border-radius:7px; box-shadow:none; }
+.blog-app .image-upload-button input { display:none; }
+.blog-app .editor-image-help { font-size:10px; line-height:1.9; color:var(--muted); margin:0 0 12px; }
+.blog-app .image-upload-status { font-size:11px; line-height:1.8; padding:10px 12px; margin-top:12px; color:var(--green)!important; border-radius:7px; background:var(--mint); }
+.blog-app .image-upload-status.is-error { background:#f7e9e5; color:#a9604c!important; }
+.blog-app .cover-image-preview { display:block; max-width:100%; max-height:180px; margin-top:14px; border-radius:9px; }
+.blog-app .markdown-editor[readonly] { opacity:.7; cursor:progress; }
+.blog-app button:disabled { opacity:.5; cursor:wait; transform:none; }
+.blog-app .post-content .article-image,.blog-app .markdown-preview .article-image { display:block; width:100%; margin:1.6em 0; text-align:center; }
+.blog-app .post-content img,.blog-app .markdown-preview img { display:block; max-width:100%; height:auto; margin:1.3em auto; }
+.blog-app .post-content .article-image img,.blog-app .markdown-preview .article-image img { margin:0 auto; }
+
+/* Keep the secondary surfaces and legacy badges in the forest palette too. */
+.blog-app .author-card { background:var(--surface-soft); }
+.blog-app .story-card { box-shadow:none; }
+.blog-app .story-card h3,.blog-app .feed-heading h2,.blog-app .page-intro h1,.blog-app .author-card h2,.blog-app .post-detail h1,.blog-app .archive-year,.blog-app .about-copy h2,.blog-app .admin-card h1,.blog-app .admin-card h2 { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+.blog-app .story-card h3 { font-weight:500; }
+.blog-app .post-cat,.blog-app .post-cat.life,.blog-app .post-cat.tech,.blog-app .post-cat.music,.blog-app .post-cat.essay { background:var(--mint); color:var(--green); }
+.blog-app .post-export-links a { background:var(--surface-soft); border-color:var(--line); }
+html,.blog-app { scrollbar-color:#a8bfb1 transparent; }
+html::-webkit-scrollbar-thumb,.blog-app::-webkit-scrollbar-thumb,.blog-app *::-webkit-scrollbar-thumb { background:#a8bfb1; }

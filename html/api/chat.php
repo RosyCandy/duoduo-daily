@@ -4,7 +4,12 @@ header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
 $messages = $input['messages'] ?? [];
 
-$api_key = 'sk-50ff5e0e0c8a4c4a9a2f0c18765686c9';
+$api_key = getenv('DASHSCOPE_API_KEY') ?: '';
+if ($api_key === '') {
+    http_response_code(503);
+    echo json_encode(['reply' => 'AI 服务尚未配置，请联系管理员。'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 $data = [
     'model' => 'qwen-turbo',
@@ -19,7 +24,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Content-Type: application/json',
     'Authorization: Bearer ' . $api_key
 ]);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
 $res = curl_exec($ch);

@@ -1,15 +1,11 @@
 <?php
 require_once 'includes/db.php';
+require_once 'includes/site.php';
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg">
-    <title>AI 对话 - DuoDuo's Daily</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <?php blog_head("AI 对话 · DuoDuo's Daily"); ?>
     <style>
         .chat-layout {
             position: relative; z-index: 10;
@@ -165,27 +161,9 @@ require_once 'includes/db.php';
         .chat-clear:hover { background: rgba(58,180,200,0.1); color: var(--accent); }
     </style>
 </head>
-<body>
-<div class="bg-overlay"></div>
-<div class="particles" id="particles"></div>
-
-<nav class="navbar">
-    <div class="nav-inner">
-        <a href="index.php" class="nav-logo">DuoDuo's Daily</a>
-        <ul class="nav-links">
-            <li><a href="index.php">首页</a></li>
-            <li><a href="index.php?cat=life">生活</a></li>
-            <li><a href="index.php?cat=essay">随笔</a></li>
-            <li><a href="index.php?cat=tech">技术</a></li>
-            <li><a href="music.php">音乐</a></li>
-            <li><a href="about.php">关于</a></li>
-            <li><a href="chat.php">AI 对话</a></li>i>
-            <li><a href="account.php">账户</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="chat-layout">
+<body class="blog-app inner-page" id="top">
+<?php blog_nav('chat'); ?>
+<div class="chat-layout" id="journal">
     <div class="chat-card">
         <div class="chat-header">
             <div class="chat-avatar"><img src="/assets/images/Qwen.jpg" alt="通义千问头像"></div>

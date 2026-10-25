@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'includes/db.php';
+require_once 'includes/site.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
@@ -23,5 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg"><title>注册账户 - DuoDuo's Daily</title><link rel="stylesheet" href="assets/css/style.css"></head>
-<body><div class="bg-overlay"></div><nav class="navbar"><div class="nav-inner"><a href="index.php" class="nav-logo">DuoDuo's Daily</a><ul class="nav-links"><li><a href="account.php">返回登录</a></li></ul></div></nav><div class="admin-layout"><div class="admin-card account-card account-single"><h2>创建账户</h2><p class="account-intro">加入 DuoDuo's Daily，开始记录你的故事。</p><?php if (!empty($error)): ?><p class="form-error"><?= htmlspecialchars($error) ?></p><?php endif; ?><form method="POST" class="login-form"><div class="form-group"><label>用户名</label><input name="username" autocomplete="username" required></div><div class="form-group"><label>密码</label><input type="password" name="password" autocomplete="new-password" minlength="6" required></div><button class="btn login-submit">注册并登录</button><div class="account-links"><a href="account.php">已有账户，直接登录</a></div></form></div></div></body></html>
+<!DOCTYPE html><html lang="zh-CN"><head><?php blog_head("注册账户 · DuoDuo's Daily"); ?>
+</head>
+<body class="blog-app auth-view" id="top"><?php blog_workspace_nav(); ?><main class="admin-layout" id="journal"><div class="admin-card account-card account-single"><h2>创建账户</h2><p class="account-intro">加入 DuoDuo's Daily，开始记录你的故事。</p><?php if (!empty($error)): ?><p class="form-error"><?= htmlspecialchars($error) ?></p><?php endif; ?><form method="POST" class="login-form"><div class="form-group"><label for="field-username">用户名</label><input id="field-username" name="username" autocomplete="username" required></div><div class="form-group"><label for="field-password">密码</label><input id="field-password" type="password" name="password" autocomplete="new-password" minlength="6" required></div><button class="btn login-submit">注册并登录</button><div class="account-links"><a href="account.php">已有账户，直接登录</a></div></form></div></main><?php blog_footer(); ?>
+</body></html>

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/site.php';
 
 $msg = '';
 
@@ -31,46 +32,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg">
-    <title>重置密码 - DuoDuo's Daily</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+<head><?php blog_head("重置密码 · DuoDuo's Daily"); ?>
 </head>
-<body>
-<div class="bg-overlay"></div>
-<nav class="navbar"><div class="nav-inner"><a href="../index.php" class="nav-logo">DuoDuo's Daily</a></div></nav>
-<div class="admin-layout">
-    <div class="admin-card" style="max-width:400px;margin:0 auto">
+<body class="blog-app auth-view" id="top">
+
+<?php blog_workspace_nav(); ?>
+<main class="admin-layout" id="journal">
+    <div class="admin-card account-card">
         <?php if($msg === 'success'): ?>
             <h2>✅ 密码重置成功！</h2>
-            <a href="index.php" class="btn" style="margin-top:16px;display:inline-block">去登录</a>
+            <a href="../account.php" class="btn" style="margin-top:16px;display:inline-block">去登录</a>
         <?php else: ?>
             <h2>重置密码</h2>
             <?php if($msg): ?><p style="color:#c0392b;margin-bottom:16px"><?= $msg ?></p><?php endif; ?>
             <form method="POST">
                 <div class="form-group">
-                    <label>邮箱地址</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($_SESSION['reset_email'] ?? '') ?>" required>
+                    <label for="field-email">邮箱地址</label><input id="field-email" type="email" name="email" value="<?= htmlspecialchars($_SESSION['reset_email'] ?? '') ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>验证码</label>
-                    <input type="text" name="token" placeholder="6位验证码" maxlength="6" required>
+                    <label for="field-token">验证码</label><input id="field-token" type="text" name="token" placeholder="6位验证码" maxlength="6" required>
                 </div>
                 <div class="form-group">
-                    <label>新密码</label>
-                    <input type="password" name="password" required>
+                    <label for="field-password">新密码</label><input id="field-password" type="password" name="password" required>
                 </div>
                 <div class="form-group">
-                    <label>确认密码</label>
-                    <input type="password" name="confirm" required>
+                    <label for="field-confirm">确认密码</label><input id="field-confirm" type="password" name="confirm" required>
                 </div>
                 <button type="submit" class="btn">重置密码</button>
             </form>
-            <p style="margin-top:12px;font-size:0.85rem"><a href="index.php" style="color:var(--accent)">← 返回登录</a></p>
+            <p style="margin-top:12px;font-size:0.85rem"><a href="../account.php" style="color:var(--accent)">← 返回登录</a></p>
         <?php endif; ?>
     </div>
-</div>
+</main>
+<?php blog_footer(); ?>
 </body>
 </html>

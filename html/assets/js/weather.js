@@ -32,7 +32,7 @@ const cityDataPromise = fetch('https://cdn.jsdelivr.net/npm/china-area-data@5.0.
     });
     cities = cities.filter((city, index, list) => list.findIndex(item => item.name === city.name) === index);
     counties = counties.filter((county, index, list) => list.findIndex(item => item.name === county.name) === index);
-});
+}).catch(() => { cities = []; counties = []; });
 
 function renderCityList(filter = '', letter = '') {
     const keyword = filter.trim();
@@ -63,10 +63,7 @@ function loadWeather(city) {
     fetch('/api/weather.php?location=' + encodeURIComponent(city))
     .then(r => r.json())
     .then(data => {
-        if (data.error) {
-            window.alert(data.error);
-            return;
-        }
+        if (data.error || !data.now) throw new Error('Weather unavailable');
         if (cityLabel) cityLabel.textContent = data.city || city;
         document.getElementById('weather-icon').textContent = getWeatherIcon(data.now.text);
         document.getElementById('weather-temp').textContent = data.now.temp + '°';
@@ -81,6 +78,8 @@ function loadWeather(city) {
                 </div>
             `).join('');
         }
+    }).catch(() => {
+        document.getElementById('weather-desc').textContent = '天气暂时不可用';
     });
 }
 

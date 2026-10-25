@@ -2,6 +2,7 @@
 session_start();
 if (!isset($_SESSION['admin'])) { header('Location: index.php'); exit; }
 require_once '../includes/db.php';
+require_once '../includes/site.php';
 require_once '../includes/functions.php';
 
 $id = (int)($_GET['id'] ?? 0);
@@ -23,35 +24,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg">
-    <title>编辑文章 - DuoDuo's Daily</title>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
-</head>
-<body>
-    <div class="bg-overlay"></div>
-    <nav class="navbar">
-        <div class="nav-inner">
-            <a href="../index.php" class="nav-logo">DuoDuo's Daily</a>
-            <ul class="nav-links"><li><a href="index.php">← 返回管理</a></li></ul>
-        </div>
-    </nav>
-    <div class="admin-layout">
+<head><?php blog_head("编辑文章 · DuoDuo's Daily"); ?>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script></head>
+<body class="blog-app management-view" id="top">
+
+    <?php blog_workspace_nav(); ?>
+    <main class="admin-layout" id="journal">
         <div class="admin-card">
             <h2>编辑文章</h2>
             <form method="POST">
                 <div class="form-group">
-                    <label>标题</label>
-                    <input type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required>
+                    <label for="field-title">标题</label><input id="field-title" type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>分类</label>
-                    <select name="category">
+                    <label for="field-category">分类</label><select id="field-category" name="category">
                         <?php foreach(['life'=>'生活','tech'=>'技术','music'=>'音乐','essay'=>'随笔'] as $v=>$l): ?>
                         <option value="<?= $v ?>" <?= $post['category']===$v?'selected':'' ?>><?= $l ?></option>
                         <?php endforeach; ?>
@@ -69,20 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label>内容</label>
-                    <div class="editor-toolbar">
-                        <button type="button" class="btn btn-sm" onclick="toggleMarkdownPreview(this)">预览</button>
-                        <label class="btn btn-sm upload-content-image">
-                            插入图片
-                            <input type="file" accept="image/*" onchange="insertContentImage(this)">
-                        </label>
-                    </div>
-                    <textarea name="content" class="markdown-editor" placeholder="支持 Markdown，可用 ![图片说明](图片地址) 插入图片" required><?= htmlspecialchars($post['content']) ?></textarea>
+                    <?php blog_editor_toolbar(); ?>
+                    <textarea name="content" class="markdown-editor" placeholder="写下正文，在需要插图的位置点击「上传正文图片」…" required><?= htmlspecialchars($post['content']) ?></textarea>
                     <div class="markdown-preview" hidden></div>
                 </div>
                 <button type="submit" class="btn">保存修改</button>
             </form>
         </div>
-    </div>
-    <script src="../assets/js/markdown-editor.js"></script>
+    </main>
+    <script src="../assets/js/markdown-editor.js?v=20261021-2"></script>
+<?php blog_footer(); ?>
 </body>
 </html>

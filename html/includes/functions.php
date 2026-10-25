@@ -1,5 +1,5 @@
 <?php
-function get_posts($limit = 8, $offset = 0, $cat = '', $search = '') {
+function get_posts($limit = 8, $offset = 0, $cat = '', $search = '', $ids = null) {
     global $pdo;
     $limit = (int)$limit;
     $offset = (int)$offset;
@@ -17,6 +17,11 @@ function get_posts($limit = 8, $offset = 0, $cat = '', $search = '') {
         $where[] = '(title LIKE ? OR content LIKE ?)';
         $params[] = '%' . $search . '%';
         $params[] = '%' . $search . '%';
+    }
+
+    if ($ids !== null) {
+        $where[] = $ids ? 'id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')' : '1 = 0';
+        foreach ($ids as $id) $params[] = (int)$id;
     }
 
     $sql = 'SELECT * FROM posts';
@@ -43,7 +48,7 @@ function get_post($id) {
     return $stmt->fetch();
 }
 
-function get_post_count($cat = '', $search = '') {
+function get_post_count($cat = '', $search = '', $ids = null) {
     global $pdo;
     $search = trim((string)$search);
     $where = [];
@@ -58,6 +63,11 @@ function get_post_count($cat = '', $search = '') {
         $where[] = '(title LIKE ? OR content LIKE ?)';
         $params[] = '%' . $search . '%';
         $params[] = '%' . $search . '%';
+    }
+
+    if ($ids !== null) {
+        $where[] = $ids ? 'id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')' : '1 = 0';
+        foreach ($ids as $id) $params[] = (int)$id;
     }
 
     $sql = 'SELECT COUNT(*) FROM posts';

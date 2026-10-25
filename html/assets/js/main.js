@@ -1,27 +1,8 @@
-// 粒子效果
-(function() {
-    const container = document.getElementById('particles');
-    if (!container) return;
-    for (let i = 0; i < 18; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.cssText = `
-            left: ${Math.random() * 100}%;
-            width: ${4 + Math.random() * 6}px;
-            height: ${4 + Math.random() * 6}px;
-            animation-duration: ${6 + Math.random() * 10}s;
-            animation-delay: ${Math.random() * 8}s;
-        `;
-        container.appendChild(p);
-    }
-})();
-
-// 导航切换
+// Legacy navigation remains available to account and administration pages.
 function toggleNav() {
-    document.querySelector('.nav-links').classList.toggle('open');
+    document.querySelector('.nav-links')?.classList.toggle('open');
 }
 
-// 音乐播放器
 const audio = document.getElementById('audio');
 const playBtn = document.getElementById('play-btn');
 const disc = document.getElementById('disc');
@@ -30,112 +11,133 @@ const songArtist = document.getElementById('song-artist');
 const progressFill = document.getElementById('progress-fill');
 const currentTimeEl = document.getElementById('current-time');
 const totalTimeEl = document.getElementById('total-time');
-const playlistEl = document.getElementById('playlist');
-
+const playlistEl = document.querySelector('[data-full-playlist]') || document.getElementById('playlist');
 let songs = [];
 let currentIndex = 0;
 let isPlaying = false;
 
-// 从服务器加载歌曲列表
-fetch('api/music.php')
-    .then(r => r.json())
-    .then(data => {
-        songs = data;
-        renderPlaylist();
-        if (songs.length > 0) loadSong(0);
-    })
-    .catch(() => {
-        // 没有歌曲时默认提示
-        if (songName) songName.textContent = '暂无音乐';
-        if (songArtist) songArtist.textContent = '去后台添加';
+if (audio) {
+    const initial = document.getElementById('music-data');
+    const request = initial ? Promise.resolve(JSON.parse(initial.textContent)) : fetch('api/music.php').then(response => {
+        if (!response.ok) throw new Error('Music unavailable');
+        return response.json();
     });
+    request.then(data => {
+        songs = Array.isArray(data) ? data : [];
+        renderPlaylist();
+        if (songs.length) loadSong(0);
+        else if (songName) songName.textContent = '暂无匹配的音乐';
+    }).catch(() => {
+        if (songName) songName.textContent = '歌单暂时未能加载';
+        if (songArtist) songArtist.textContent = '稍后刷新再试试';
+    });
+}
 
 function renderPlaylist() {
     if (!playlistEl) return;
-    playlistEl.innerHTML = '';
-    songs.forEach((s, i) => {
-        const div = document.createElement('div');
-        div.className = 'playlist-item' + (i === currentIndex ? ' active' : '');
-        div.textContent = (s.artist ? s.artist + ' - ' : '') + s.name;
-        div.onclick = () => { loadSong(i); togglePlay(true); };
-        playlistEl.appendChild(div);
+    playlistEl.replaceChildren();
+    if (!songs.length) {
+        const empty = document.createElement('p');
+        empty.className = 'panel-intro';
+        empty.textContent = '没有找到匹配的音乐，换一个关键词试试。';
+        playlistEl.appendChild(empty);
+    }
+    songs.forEach((song, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'playlist-item' + (index === currentIndex ? ' active' : '');
+        button.setAttribute('aria-label', '播放：' + song.name);
+        button.setAttribute('aria-current', index === currentIndex ? 'true' : 'false');
+        if (playlistEl.hasAttribute('data-full-playlist')) {
+            const number = document.createElement('span');
+            number.className = 'track-number';
+            number.textContent = String(index + 1).padStart(2, '0');
+            const info = document.createElement('span');
+            info.className = 'track-info';
+            const title = document.createElement('span');
+            title.textContent = song.name;
+            const artist = document.createElement('small');
+            artist.textContent = song.artist || '未知艺术家';
+            info.append(title, artist);
+            const play = document.createElement('span');
+            play.className = 'track-play';
+            play.textContent = '▶';
+            play.setAttribute('aria-hidden', 'true');
+            button.append(number, info, play);
+        } else button.textContent = (song.artist ? song.artist + ' - ' : '') + song.name;
+        button.addEventListener('click', () => { loadSong(index); togglePlay(true); });
+        playlistEl.appendChild(button);
     });
 }
 
 function loadSong(index) {
-    if (!songs.length) return;
+    if (!audio || !songs.length) return;
     currentIndex = index;
-    const s = songs[index];
-    audio.src = s.file_path;
-    if (songName) songName.textContent = s.name;
-    if (songArtist) songArtist.textContent = s.artist || '未知艺术家';
+    audio.src = songs[index].file_path;
+    if (songName) songName.textContent = songs[index].name;
+    if (songArtist) songArtist.textContent = songs[index].artist || '未知艺术家';
+    if (progressFill) progressFill.style.width = '0%';
+    if (currentTimeEl) currentTimeEl.textContent = '0:00';
+    if (totalTimeEl) totalTimeEl.textContent = '0:00';
     renderPlaylist();
 }
-
 function togglePlay(forcePlay) {
-    if (!songs.length) return;
-    if (forcePlay || !isPlaying) {
-        audio.play().then(() => {
-            isPlaying = true;
-            if (playBtn) playBtn.textContent = '⏸';
-            if (disc) disc.classList.add('spinning');
-        }).catch(() => {});
-    } else {
-        audio.pause();
-        isPlaying = false;
-        if (playBtn) playBtn.textContent = '▶';
-        if (disc) disc.classList.remove('spinning');
-    }
+    if (!audio || !songs.length) return;
+    if (forcePlay || audio.paused) audio.play().catch(() => {
+        if (songArtist) songArtist.textContent = '暂时无法播放，请重试或切换歌曲';
+    });
+    else audio.pause();
 }
-
 function prevSong() {
+    const resume = isPlaying;
     loadSong((currentIndex - 1 + songs.length) % songs.length);
-    if (isPlaying) togglePlay(true);
+    if (resume) togglePlay(true);
 }
-
 function nextSong() {
+    const resume = isPlaying || (audio && audio.ended);
     loadSong((currentIndex + 1) % songs.length);
-    if (isPlaying) togglePlay(true);
+    if (resume) togglePlay(true);
 }
-
+function syncPlayer() {
+    isPlaying = !audio.paused && !audio.ended;
+    if (playBtn) { playBtn.textContent = isPlaying ? '⏸' : '▶'; playBtn.setAttribute('aria-label', isPlaying ? '暂停' : '播放'); }
+    disc?.classList.toggle('spinning', isPlaying);
+}
 if (audio) {
+    audio.addEventListener('play', syncPlayer);
+    audio.addEventListener('pause', syncPlayer);
+    const progress = document.querySelector('.progress-bar');
     audio.addEventListener('timeupdate', () => {
-        if (!audio.duration) return;
-        const pct = (audio.currentTime / audio.duration) * 100;
-        if (progressFill) progressFill.style.width = pct + '%';
+        if (!Number.isFinite(audio.duration)) return;
+        const percent = audio.currentTime / audio.duration * 100;
+        if (progressFill) progressFill.style.width = percent + '%';
         if (currentTimeEl) currentTimeEl.textContent = formatTime(audio.currentTime);
+        progress?.setAttribute('aria-valuenow', String(Math.round(percent)));
     });
-
-    audio.addEventListener('loadedmetadata', () => {
-        if (totalTimeEl) totalTimeEl.textContent = formatTime(audio.duration);
-    });
-
+    audio.addEventListener('loadedmetadata', () => { if (totalTimeEl) totalTimeEl.textContent = formatTime(audio.duration); });
     audio.addEventListener('ended', nextSong);
-
-    const progressBar = document.querySelector('.progress-bar');
-    if (progressBar) {
-        progressBar.addEventListener('click', e => {
-            const rect = progressBar.getBoundingClientRect();
-            const pct = (e.clientX - rect.left) / rect.width;
-            audio.currentTime = pct * audio.duration;
-        });
-    }
+    progress?.addEventListener('click', event => {
+        if (!Number.isFinite(audio.duration)) return;
+        const rect = progress.getBoundingClientRect();
+        audio.currentTime = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)) * audio.duration;
+    });
+    progress?.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || !Number.isFinite(audio.duration)) return;
+        event.preventDefault();
+        audio.currentTime = Math.max(0, Math.min(audio.duration, audio.currentTime + (event.key === 'ArrowRight' ? 5 : -5)));
+    });
 }
-
-function formatTime(s) {
-    if (isNaN(s)) return '0:00';
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60).toString().padStart(2, '0');
-    return `${m}:${sec}`;
+function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return '0:00';
+    return `${Math.floor(seconds / 60)}:${Math.floor(seconds % 60).toString().padStart(2, '0')}`;
 }
-
-// 日历
 function updateCalendar() {
     const now = new Date();
-    const weekdays = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
-    document.getElementById('cal-date') && (document.getElementById('cal-date').textContent = now.getDate());
-    document.getElementById('cal-weekday') && (document.getElementById('cal-weekday').textContent = weekdays[now.getDay()]);
-    document.getElementById('cal-lunar') && (document.getElementById('cal-lunar').textContent =
-        now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0'));
+    const values = {
+        'cal-date': now.getDate(),
+        'cal-weekday': ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][now.getDay()],
+        'cal-lunar': `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}`
+    };
+    Object.entries(values).forEach(([id, value]) => { const el = document.getElementById(id); if (el) el.textContent = value; });
 }
 updateCalendar();

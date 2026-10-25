@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'includes/db.php';
+require_once 'includes/site.php';
 
 if (isset($_GET['logout'])) {
     unset($_SESSION['user'], $_SESSION['admin']);
@@ -42,20 +43,18 @@ $logged_in = !empty($_SESSION['user']) || !empty($_SESSION['admin']);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg"><title>账户中心 - DuoDuo's Daily</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<head><?php blog_head("账户中心 · DuoDuo's Daily"); ?>
 </head>
-<body><div class="bg-overlay"></div>
-<nav class="navbar"><div class="nav-inner"><a href="index.php" class="nav-logo">DuoDuo's Daily</a><ul class="nav-links"><li><a href="index.php">返回博客</a></li></ul></div></nav>
-<div class="admin-layout">
+<body class="blog-app auth-view" id="top">
+<?php blog_workspace_nav(); ?>
+<main class="admin-layout" id="journal">
 <div class="admin-card account-card">
 <?php if ($logged_in): ?>
 <h2>欢迎回来</h2><p>你的账户已登录。</p><a class="btn" href="<?= !empty($_SESSION['admin']) ? 'admin/index.php' : 'user/index.php' ?>">进入工作台</a> <a class="text-link" href="account.php?logout=1">退出登录</a>
 <?php else: ?>
-<h2>登录账户</h2>
+<span class="eyebrow">WELCOME BACK</span><h2>欢迎回到日常。</h2><p class="account-intro">登录账户，继续记录你的故事。</p>
 <?php if (!empty($error)): ?><p class="form-error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
-<form method="POST" class="login-form"><div class="form-group"><label>用户名</label><input name="username" autocomplete="username" required></div><div class="form-group"><label>密码</label><input type="password" name="password" autocomplete="current-password" required></div><button class="btn login-submit">登录</button><div class="account-links"><a href="admin/forgot.php">忘记密码</a><span>·</span><a href="register.php">注册账户</a></div></form>
-<?php endif; ?></div></div>
-<script src="assets/js/main.js"></script></body></html>
+<form method="POST" class="login-form"><div class="form-group"><label for="field-username">用户名</label><input id="field-username" name="username" autocomplete="username" required></div><div class="form-group"><label for="field-password">密码</label><input id="field-password" type="password" name="password" autocomplete="current-password" required></div><button class="btn login-submit">登录</button><div class="account-links"><a href="admin/forgot.php">忘记密码</a><span>·</span><a href="register.php">注册账户</a></div></form>
+<?php endif; ?></div></main>
+<?php blog_footer(); ?>
+</body></html>

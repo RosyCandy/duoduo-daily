@@ -2,6 +2,7 @@
 date_default_timezone_set('Asia/Shanghai');
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/site.php';
 
 $msg = '';
 $success = false;
@@ -67,18 +68,13 @@ function send_reset_email($to, $token) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/jpeg" href="/assets/images/cover.jpg">
-    <title>忘记密码 - DuoDuo's Daily</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+<head><?php blog_head("忘记密码 · DuoDuo's Daily"); ?>
 </head>
-<body>
-<div class="bg-overlay"></div>
-<nav class="navbar"><div class="nav-inner"><a href="../index.php" class="nav-logo">DuoDuo's Daily</a></div></nav>
-<div class="admin-layout">
-    <div class="admin-card" style="max-width:400px;margin:0 auto">
+<body class="blog-app auth-view" id="top">
+
+<?php blog_workspace_nav(); ?>
+<main class="admin-layout" id="journal">
+    <div class="admin-card account-card">
         <h2>忘记密码</h2>
         <?php if($success): ?>
             <p style="color:#3ab4c8;margin-bottom:16px">验证码已发送到你的邮箱，15分钟内有效！</p>
@@ -87,14 +83,14 @@ function send_reset_email($to, $token) {
             <?php if($msg): ?><p style="color:#c0392b;margin-bottom:16px"><?= $msg ?></p><?php endif; ?>
             <form method="POST">
                 <div class="form-group">
-                    <label>邮箱地址</label>
-                    <input type="email" name="email" placeholder="输入你的邮箱" required>
+                    <label for="field-email">邮箱地址</label><input id="field-email" type="email" name="email" placeholder="输入你的邮箱" required>
                 </div>
                 <button type="submit" class="btn">发送验证码</button>
             </form>
-            <p style="margin-top:12px;font-size:0.85rem"><a href="index.php" style="color:var(--accent)">← 返回登录</a></p>
+            <p style="margin-top:12px;font-size:0.85rem"><a href="../account.php" style="color:var(--accent)">← 返回登录</a></p>
         <?php endif; ?>
     </div>
-</div>
+</main>
+<?php blog_footer(); ?>
 </body>
 </html>
